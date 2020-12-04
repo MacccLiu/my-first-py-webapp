@@ -10,7 +10,7 @@ async def create_pool(loop, **kw):
     global __pool
     __pool = await aiomysql.create_pool(
         host = kw.get('host', 'localhost'),
-        port = kw.get('port', 3306)
+        port = kw.get('port', 3306),
         user = kw['user'],
         password = kw['password'],
         db = kw['db'],
@@ -102,7 +102,7 @@ class ModelMetaClass(type):
                 mappings[k] = v
                 if v.primary_key:
                     if primaryKey:
-                        raise StandardError('Duplicate primary key for field: %s', % k)
+                        raise StandardError('Duplicate primary key for field: %s' % k)
                     primaryKey = k
                 else:
                     fields.append(k)
@@ -208,8 +208,8 @@ class Model(dict, metaclass=ModelMetaClass):
         if rows != 1:
             logging.warn('failed to update by primary key: affected rows: %s' % rows)
     
-    args = list(map(self.getValue, self.__fields__))
-        args.append(self.getValue(self.__primary_key__))
-        rows = await execute(self.__update__, args)
-        if rows != 1:
-            logging.warn('failed to update by primary key: affected rows: %s' % rows)
+    async def remove(self):
+        args = [self.getValue(self.__primary_key__)]
+        rows = await execute(self.__delete__, args)
+        if row != 1:
+            logging.warn('failed to remove by primary key: affected row: %s' % rows)
