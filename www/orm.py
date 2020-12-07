@@ -25,12 +25,13 @@ async def select(sql, args, size=None):
     log(sql, args)
     global __pool
     async with __pool.get() as conn:
+        rs = ''
         async with conn.cursor(aiomysql.DictCursor) as cur:
             await cur.execute(sql.replace('?', '%s'), args or ())
             if size:
                 rs = await cur.fetchmany(size)
             else:
-                re = await cur.fetchall()
+                rs = await cur.fetchall()
         logging.info('rows returned: %s' % len(rs))
         return rs
 
