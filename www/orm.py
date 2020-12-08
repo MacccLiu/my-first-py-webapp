@@ -212,5 +212,5 @@ class Model(dict, metaclass=ModelMetaClass):
     async def remove(self):
         args = [self.getValue(self.__primary_key__)]
         rows = await execute(self.__delete__, args)
-        if row != 1:
+        if rows != 1:
             logging.warn('failed to remove by primary key: affected row: %s' % rows)

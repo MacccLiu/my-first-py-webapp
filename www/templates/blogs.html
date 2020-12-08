@@ -21,12 +21,10 @@
         </article>
         <hr class="uk-article-divider">
     {% endfor %}
+    {{ pagination('/?page=', page) }}
     </div>
 
     <div class="uk-width-medium-1-4">
-        <div class="uk-panel uk-panel-header">
-            
-        </div>
     </div>
 
 {% endblock %}
